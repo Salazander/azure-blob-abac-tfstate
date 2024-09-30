@@ -120,4 +120,5 @@ The return value of the overall logic expression (`true` or `false`) determines 
 The first logic expression determines whether the condition defined in the second logic expression needs to be evaluated for the current action.
 If not, the first logic block evaluates to `true` and the action will be allowed.
 If further inspection is required, the first logic block evaluates to `false` and the second logic expression is evaluated.
+
 In the condition defined above, the return value will be `true` if the path of the blob contains the right tenant identifier.
