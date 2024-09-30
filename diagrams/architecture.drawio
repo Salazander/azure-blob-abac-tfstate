@@ -170,7 +170,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="HCL168uVD7HzCAb61cff-25" value="On-Boarding&lt;br&gt;Script" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.script_file;fontSize=11;" vertex="1" parent="EHuBInG1ZAGY9Ou18AHe-1">
+        <mxCell id="HCL168uVD7HzCAb61cff-25" value="Onboarding&lt;br&gt;Scripts" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.script_file;fontSize=11;" vertex="1" parent="EHuBInG1ZAGY9Ou18AHe-1">
           <mxGeometry x="610" y="100" width="47" height="50" as="geometry" />
         </mxCell>
         <mxCell id="HCL168uVD7HzCAb61cff-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.859;entryY=0.002;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;dashed=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;" edge="1" parent="EHuBInG1ZAGY9Ou18AHe-1" source="HCL168uVD7HzCAb61cff-25">
