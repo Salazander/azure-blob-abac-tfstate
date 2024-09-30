@@ -1,6 +1,6 @@
 # azure-blob-abac-tfstate
 
-This repository provides a guide on securely utilizing a single Azure Blob Container as the state backend storage for a multi-tenant solution managed by Terraform.
+This repository offers guidance on securely using a single Azure Blob Container as the state backend storage for a multi-tenant solution managed by Terraform.
 
 ## Introduction
 
@@ -29,7 +29,7 @@ az login
 
 ### 1.+2.+3. Create the Storage Account
 
-Since storage account names must be unique, adapt the placeholder with an available name.
+Since storage account names must be unique, replace the placeholder with an available name.
 
 ```bash
 ./scripts/create-storage-account.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>"
@@ -37,7 +37,7 @@ Since storage account names must be unique, adapt the placeholder with an availa
 
 ### 4. Onboard Tenant 1
 
-Since service principal names must be unique, adapt the placeholder with an available name.
+Since service principal names must be unique, replace the placeholder with an available name.
 
 ```bash
 ./scripts/onboard-tenant.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>" "<UNIQUE_SP_NAME_1>" "tenant-1"
@@ -45,7 +45,7 @@ Since service principal names must be unique, adapt the placeholder with an avai
 
 ### 5. Onboard Tenant 2
 
-Since service principal names must be unique, adapt the placeholder with an available name.
+Since service principal names must be unique, replace the placeholder with an available name.
 
 ```bash
 ./scripts/onboard-tenant.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>" "<UNIQUE_SP_NAME_2>" "tenant-2"
