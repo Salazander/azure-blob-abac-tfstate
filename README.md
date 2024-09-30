@@ -23,8 +23,8 @@ The following steps will provision the following architecture:
 ### 0. Login and Register Resource Providers
 
 ```bash
-    az login
-    ./scripts/register-providers.sh
+az login
+./scripts/register-providers.sh
 ```
 
 ### 1.+2.+3. Create the Storage Account
@@ -32,7 +32,7 @@ The following steps will provision the following architecture:
 Since storage account names must be unique, adapt the placeholder with an available name.
 
 ```bash
-    ./scripts/create-storage-account.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>"
+./scripts/create-storage-account.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>"
 ```
 
 ### 4. Onboard Tenant 1
@@ -40,7 +40,7 @@ Since storage account names must be unique, adapt the placeholder with an availa
 Since service principal names must be unique, adapt the placeholder with an available name.
 
 ```bash
-    ./scripts/onboard-tenant.sh "<UNIQUE_SP_NAME_1>" "tenant-1"
+./scripts/onboard-tenant.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>" "<UNIQUE_SP_NAME_1>" "tenant-1"
 ```
 
 ### 5. Onboard Tenant 2
@@ -48,7 +48,7 @@ Since service principal names must be unique, adapt the placeholder with an avai
 Since service principal names must be unique, adapt the placeholder with an available name.
 
 ```bash
-    ./scripts/onboard-tenant.sh "<UNIQUE_SP_NAME_2>" "tenant-2"
+./scripts/onboard-tenant.sh "<UNIQUE_STORAGE_ACCOUNT_NAME>" "<UNIQUE_SP_NAME_2>" "tenant-2"
 ```
 
 ### 6. Provision Infrastructure of Tenant 1
@@ -56,23 +56,68 @@ Since service principal names must be unique, adapt the placeholder with an avai
 Now everything is in place to terraform the infrastructure for tenant 1.
 
 ```bash
-    ./scripts/provision-tenant-infra.sh "tenant-1" "tenant-1"
+./scripts/provision-tenant-infra.sh "tenant-1" "tenant-1"
 ```
 
 ### 7. Provision Infrastructure of Tenant 2
 
-Now everything is in place to terraform the infrastructure for tenant 2.
+Proceed with tenant 2.
 
 ```bash
-    ./scripts/provision-tenant-infra.sh "tenant-2" "tenant-2"
+./scripts/provision-tenant-infra.sh "tenant-2" "tenant-2"
 ```
 
 ### Test the Access Rules
 
-The access rules can be validated by trying to modify infrastructure of `tenant-2` while impersonating `tenant-1`:
+The access rules can be validated by trying to modify infrastructure of `tenant-2` while impersonating `tenant-1` (or vice versa):
 
 ```bash
-    ./scripts/provision-tenant-infra.sh "tenant-1" "tenant-2"
+./scripts/provision-tenant-infra.sh "tenant-1" "tenant-2"
+./scripts/provision-tenant-infra.sh "tenant-2" "tenant-1"
 ```
 
 The returned error message indicates that reading the Terraform state file failed, which is expected behaviour.
+
+## Understand the ABAC conditions
+
+The attribute-based access conditions look as follows:
+
+```bash
+(
+    (
+        !(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write'})
+        AND
+        !(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/add/action'})
+        AND
+        !(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/delete'})
+        AND
+        !(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/move/action'})
+        AND
+        !(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read'} AND NOT SubOperationMatches{'Blob.List'})
+    )
+    OR 
+    (
+        @Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLikeIgnoreCase '$TENANT_ID/*'
+    )
+)
+```
+
+or put differently
+
+```
+(
+    (
+        1st logic expression: Is the operation always allowed?
+    )
+    OR
+    (
+        2nd logic expression: Does this particular operation fulfill the access conditions?
+    )
+)
+```
+
+The return value of the overall logic expression (`true` or `false`) determines whether an operation will be allowed.
+The first logic expression determines whether the condition defined in the second logic expression needs to be evaluated for the current action.
+If not, the first logic block evaluates to `true` and the action will be allowed.
+If further inspection is required, the first logic block evaluates to `false` and the second logic expression is evaluated.
+In the condition defined above, the return value will be `true` if the path of the blob contains the right tenant identifier.
