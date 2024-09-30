@@ -1,2 +1,3 @@
 *.bkp
 sp-credentials-*.sh
+.terraform*

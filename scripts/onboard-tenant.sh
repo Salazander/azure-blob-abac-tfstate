@@ -5,6 +5,11 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
     exit 1
 fi
 
+if [ "$3" != "tenant-1" ] && [ "$3" != "tenant-2" ]; then
+    echo "Error: TENANT_ID must be either 'tenant-1' or 'tenant-2'"
+    exit 1
+fi
+
 set -euxo pipefail
 
 export STORAGE_ACCOUNT_NAME=$1
