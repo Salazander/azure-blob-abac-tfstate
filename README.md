@@ -80,7 +80,11 @@ The returned error message indicates that reading the Terraform state file faile
 
 ## Understand the ABAC conditions
 
-The attribute-based access conditions look as follows:
+Attribute-based access control builds on top of role-based access control.
+It enables the creation of conditional role assignments.
+More detailed explanations can be found [here](https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-overview).
+In this sample, the service principal used by Terraform requires the `Storage Blob Data Contributor`-role to manage the state files hosted in Azure Blob Storage.
+The following access conditions check whether the access to a given blob path is legitimate.
 
 ```bash
 (
