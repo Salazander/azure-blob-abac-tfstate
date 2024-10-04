@@ -1,12 +1,24 @@
 # azure-blob-abac-tfstate
 
 This repository offers guidance on securely using a single Azure Blob Container as the state backend storage for a multi-tenant solution managed by Terraform.
+> Note: The words tenant and customer are used interchangeably in this document. They refer to the end-user of the software solution.
 
 ## Introduction
 
-Multi-tenant cloud solutions sometimes require tenant-specific resources to be provisioned.
+Multi-tenant software solutions need to ensure that each onboarded customer's data is kept private unless sharing is requested explictly.
+Data separation can happen at a logical and/or physical level.
+When strict physical data separation is required, dedicated cloud resources need to be provisioned.
+Furthermore, some tenants might opt into advanced features that require additional cloud services.
+
+The Terraform configuration defines the desired state of each tenant's infrastructure.
+To cater for the individuality of each customer's cloud resources, it is advisable to split the Terraform configuration accordingly.
+In most cases, splitting the system architecture will lead to multiple `tfstate` files. 
+In this example, the cloud resources of each tenant are kept in distinct state files.
+
 Managing multiple `tfstate` files in a shared Azure Blob Container requires careful design of the access policies.
 [ABAC](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-auth-abac)-rules can be leveraged to ensure that Terraform only gets access to the state files of the tenant that requires infrastructural changes.
+
+The next sections will illustrate how to leverage Service Principals and ABAC-rules to restrict Terraform to operate on specific state files and resource groups only.
 
 ## Before you start
 
